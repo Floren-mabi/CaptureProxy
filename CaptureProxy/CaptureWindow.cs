@@ -249,8 +249,18 @@ namespace CaptureProxy
             {
                 Directory.CreateDirectory("capture");
             }
-            string filename = DateTime.Now.ToString("yyyy-MM-dd_HH_mm_ss_FF");
-            bmp.Save("capture\\" + _data.Title + "_" + filename + ".png", ImageFormat.Png);
+
+            string fileName = _data.Title;
+            if (fileName == null || fileName.Length == 0)
+            {
+                fileName = "Caputure";
+            }
+
+            string timeStamp = DateTime.Now.ToString("yyyy-MM-dd_HH_mm_ss_FF");
+            char[] invalidChars = Path.GetInvalidFileNameChars();
+            fileName = string.Concat(fileName.Select(c => invalidChars.Contains(c) ? '_' : c));
+
+            bmp.Save("capture\\" + fileName + "_" + timeStamp + ".png", ImageFormat.Png);
             bmp.Dispose();
         }
 
